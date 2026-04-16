@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Negocio – Nutrirte</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+  :root {
+    --green: #2d7a3a;
+    --green-light: #4caf50;
+    --green-pale: #e8f5e9;
+    --peach: #f4845f;
+    --peach-light: #fdd5c5;
+    --cream: #fffdf7;
+    --dark: #1a1a1a;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+    --radius: 16px;
+    --radius-sm: 8px;
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+  /* HEADER */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--white); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 72px; transition: var(--transition); border-bottom: 1px solid transparent; }
+  header.scrolled { box-shadow: var(--shadow); border-color: #e5e7eb; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--green), var(--green-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
+  .logo-text span { color: var(--peach); }
+  nav { display: flex; align-items: center; gap: 4px; }
+  nav a { text-decoration: none; color: var(--dark); font-size: 0.88rem; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); transition: var(--transition); position: relative; }
+  nav a:hover { color: var(--green); background: var(--green-pale); }
+  nav a.active { color: var(--green); background: var(--green-pale); }
+  .dropdown { position: relative; }
+  .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; background: var(--white); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); min-width: 160px; padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-menu a { display: block; padding: 8px 12px; border-radius: 6px; font-size: 0.84rem; }
+  .dropdown > a { display: flex; align-items: center; gap: 4px; }
+  .dropdown > a::after { content: '▾'; font-size: 0.7rem; }
+  .nav-cta { background: linear-gradient(135deg, var(--green), var(--green-light)); color: var(--white) !important; padding: 10px 20px !important; border-radius: 50px !important; font-weight: 600 !important; margin-left: 8px; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(76,175,80,0.4); background: var(--white) !important; color: var(--green) !important; border: 2px solid var(--green); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; border: none; background: none; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: var(--transition); }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0; background: var(--white); z-index: 999; padding: 24px 5%; overflow-y: auto; flex-direction: column; gap: 8px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { text-decoration: none; color: var(--dark); font-size: 1rem; font-weight: 500; padding: 14px 16px; border-radius: var(--radius-sm); border-bottom: 1px solid #f0f0f0; }
+  .mobile-menu a:hover { background: var(--green-pale); color: var(--green); }
+  .mobile-menu .nav-cta { color: white !important; text-align: center; margin-top: 8px; }
+
+  /* PAGE HERO BANNER */
+  .page-hero { padding: 140px 5% 80px; background: linear-gradient(135deg, #f0faf0 0%, #fff8f5 50%, #fefefe 100%); position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%); border-radius: 50%; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-hero-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--peach-light); color: var(--peach); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; color: var(--dark); margin-bottom: 16px; }
+  .page-hero h1 em { color: var(--green); font-style: normal; }
+  .page-hero p { font-size: 1.05rem; color: var(--gray); line-height: 1.7; max-width: 580px; }
+
+  /* SHARED */
+  section { padding: 90px 5%; }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2; color: var(--dark); margin-bottom: 16px; }
+  .section-sub { font-size: 1rem; color: var(--gray); max-width: 580px; line-height: 1.7; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--green), var(--green-light)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(45,122,58,0.35); transition: var(--transition); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(45,122,58,0.45); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--dark); border: 2px solid #d1d5db; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: var(--transition); }
+  .btn-secondary:hover { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+  .btn-white { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--green); padding: 16px 36px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transition: var(--transition); white-space: nowrap; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .btn-peach { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #e8622a, var(--peach)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(244,132,95,0.4); transition: var(--transition); }
+  .btn-peach:hover { transform: translateY(-2px); }
+  .negocio-banner { background: linear-gradient(135deg, #1b4d24 0%, #2d7a3a 50%, #3a9f4a 100%); padding: 80px 5%; position: relative; overflow: hidden; }
+  .negocio-banner::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border: 60px solid rgba(255,255,255,0.05); border-radius: 50%; }
+  .negocio-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .negocio-text p { font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+  .negocio-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; color: white; line-height: 1.2; }
+
+  /* FOOTER */
+  footer { background: #111; color: rgba(255,255,255,0.7); padding: 60px 5% 30px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 14px; max-width: 280px; }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; text-decoration: none; transition: var(--transition); }
+  .social-btn:hover { background: var(--green); transform: translateY(-2px); }
+  .footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { color: rgba(255,255,255,0.55); font-size: 0.85rem; text-decoration: none; transition: var(--transition); }
+  .footer-col ul li a:hover { color: var(--green-light); padding-left: 4px; }
+  .footer-contact { display: flex; flex-direction: column; gap: 12px; }
+  .contact-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+  .contact-item i { color: var(--green-light); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: rgba(255,255,255,0.35); flex-wrap: wrap; gap: 12px; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .negocio-inner { flex-direction: column; text-align: center; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+
+  .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+  .step-card { background: var(--white); border-radius: var(--radius); padding: 36px 28px; position: relative; border: 2px solid transparent; transition: var(--transition); }
+  .step-card:hover { border-color: var(--green-light); box-shadow: var(--shadow-lg); }
+  .step-num { font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900; color: var(--green-pale); line-height: 1; margin-bottom: 16px; }
+  .step-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+  .step-card p { font-size: 0.87rem; color: var(--gray); line-height: 1.65; }
+  .income-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .income-card { background: var(--white); border-radius: var(--radius); padding: 36px 24px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); }
+  .income-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .income-level { font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--peach); margin-bottom: 12px; }
+  .income-amount { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 900; color: var(--green); margin-bottom: 8px; }
+  .income-desc { font-size: 0.85rem; color: var(--gray); line-height: 1.6; }
+  .faq-list { display: flex; flex-direction: column; gap: 16px; max-width: 800px; margin: 0 auto; }
+  .faq-item { background: var(--white); border-radius: var(--radius-sm); padding: 24px; border: 2px solid #eee; cursor: pointer; transition: var(--transition); }
+  .faq-item:hover { border-color: var(--green-light); }
+  .faq-q { font-weight: 700; font-size: 0.96rem; display: flex; justify-content: space-between; align-items: center; }
+  .faq-a { font-size: 0.88rem; color: var(--gray); margin-top: 12px; line-height: 1.65; display: none; }
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open { border-color: var(--green-light); }
+  @media (max-width: 768px) { .steps-grid, .income-grid { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+    <span class="logo-text">Nutrir<span>te</span></span>
+  </a>
+  <nav>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="productos.html">Productos</a>
+    <div class="dropdown">
+      <a href="control-peso.html">Control de Peso</a>
+      <div class="dropdown-menu">
+        <a href="control-peso.html#basico">Básico</a>
+        <a href="control-peso.html#avanzado">Avanzado</a>
+        <a href="control-peso.html#completo">Completo</a>
+      </div>
+    </div>
+    <a href="tu-negocio.html" class="active">Tu Negocio</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="ver-productos.html" class="nav-cta">Ver Productos</a>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="nosotros.html">Nosotros</a>
+  <a href="productos.html">Productos</a>
+  <a href="control-peso.html#basico">Control de Peso – Básico</a>
+  <a href="control-peso.html#avanzado">Control de Peso – Avanzado</a>
+  <a href="control-peso.html#completo">Control de Peso – Completo</a>
+  <a href="tu-negocio.html">Tu Negocio</a>
+  <a href="blog.html">Blog</a>
+  <a href="contacto.html">Contacto</a>
+  <a href="ver-productos.html" class="nav-cta">Ver Productos <i class="fa fa-arrow-right"></i></a>
+</div>
+
+<div class="page-hero" style="background:linear-gradient(135deg,#1b4d24 0%,#2d7a3a 50%,#3a9f4a 100%);">
+  <div class="page-hero-inner">
+    <div class="page-hero-tag reveal" style="background:rgba(255,255,255,0.15);color:white;"><i class="fa-solid fa-rocket"></i> Franquicia Digital</div>
+    <h1 class="reveal" style="color:white;">Tu negocio de <em style="color:var(--peach-light);">bienestar</em><br>empieza hoy</h1>
+    <p class="reveal" style="color:rgba(255,255,255,0.75);">Convertí tu pasión por la salud en ingresos reales. Sin inventario, sin local, sin experiencia previa. Solo dedicación y nuestro respaldo total.</p>
+    <div class="reveal" style="margin-top:32px;display:flex;gap:14px;flex-wrap:wrap;">
+      <a href="contacto.html" class="btn-white">Quiero Empezar <i class="fa-solid fa-arrow-right"></i></a>
+      <a href="#como-funciona" class="btn-secondary" style="border-color:rgba(255,255,255,0.3);color:white;">Cómo funciona</a>
+    </div>
+  </div>
+</div>
+
+<section style="background:var(--gray-light);">
+  <div class="container">
+    <div class="steps-grid">
+      <div class="stat-style reveal" style="text-align:center;padding:40px 20px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);">
+        <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--green);">$0</div>
+        <div style="font-size:0.85rem;color:var(--gray);margin-top:8px;">Inversión en stock</div>
+      </div>
+      <div class="stat-style reveal reveal-delay-1" style="text-align:center;padding:40px 20px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);">
+        <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--green);">100%</div>
+        <div style="font-size:0.85rem;color:var(--gray);margin-top:8px;">Digital y flexible</div>
+      </div>
+      <div class="stat-style reveal reveal-delay-2" style="text-align:center;padding:40px 20px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);">
+        <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--green);">24/7</div>
+        <div style="font-size:0.85rem;color:var(--gray);margin-top:8px;">Soporte de tu equipo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" style="background:var(--white);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <span class="section-label reveal">Proceso Simple</span>
+      <h2 class="section-title reveal">¿Cómo funciona?</h2>
+      <p class="section-sub reveal" style="margin:0 auto;">En 3 pasos empezás a generar ingresos con Nutrirte.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal"><div class="step-num">01</div><h3>Registrate gratis</h3><p>Completá el formulario de registro y comenzá tu aventura como distribuidor digital de Nutrirte sin costo inicial.</p></div>
+      <div class="step-card reveal reveal-delay-1"><div class="step-num">02</div><h3>Recibí tu kit de inicio</h3><p>Te enviamos materiales digitales, acceso a la plataforma y capacitación completa para empezar a vender con éxito.</p></div>
+      <div class="step-card reveal reveal-delay-2"><div class="step-num">03</div><h3>Empezá a ganar</h3><p>Compartí los productos en tus redes, acompañá a tus clientes y cobrá tus comisiones de forma automática.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--gray-light);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <span class="section-label reveal">Ingresos Reales</span>
+      <h2 class="section-title reveal">¿Cuánto podés ganar?</h2>
+      <p class="section-sub reveal" style="margin:0 auto;">Los ingresos varían según tu dedicación. Estos son rangos reales de nuestra red.</p>
+    </div>
+    <div class="income-grid">
+      <div class="income-card reveal"><div class="income-level">Inicio</div><div class="income-amount">$80k</div><p class="income-desc">Promedio mensual en los primeros 3 meses con dedicación part-time.</p></div>
+      <div class="income-card reveal reveal-delay-1"><div class="income-level">Crecimiento</div><div class="income-amount">$250k</div><p class="income-desc">Distribuidores activos con red consolidada de entre 6 y 12 meses.</p></div>
+      <div class="income-card reveal reveal-delay-2"><div class="income-level">Liderazgo</div><div class="income-amount">$600k+</div><p class="income-desc">Líderes de equipo con red propia y trabajo full-time en Nutrirte.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--white);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+      <div class="reveal">
+        <img src="https://placehold.co/520x440/e8f5e9/2d7a3a?text=Comunidad+Nutrirte" alt="Comunidad" style="width:100%;border-radius:24px;box-shadow:var(--shadow-lg);">
+      </div>
+      <div class="reveal reveal-delay-1">
+        <span class="section-label">Beneficios</span>
+        <h2 class="section-title">Por qué elegir Nutrirte</h2>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:16px;margin-bottom:36px;">
+          <li style="display:flex;align-items:flex-start;gap:14px;"><div style="width:36px;height:36px;background:var(--green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-check" style="color:var(--green);font-size:0.8rem;"></i></div><div><strong>Sin stock ni local</strong><br><span style="font-size:0.87rem;color:var(--gray);">Todo se gestiona 100% online desde tu celular.</span></div></li>
+          <li style="display:flex;align-items:flex-start;gap:14px;"><div style="width:36px;height:36px;background:var(--green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-check" style="color:var(--green);font-size:0.8rem;"></i></div><div><strong>Capacitación continua</strong><br><span style="font-size:0.87rem;color:var(--gray);">Acceso a webinars, materiales y soporte de tu upline.</span></div></li>
+          <li style="display:flex;align-items:flex-start;gap:14px;"><div style="width:36px;height:36px;background:var(--green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-check" style="color:var(--green);font-size:0.8rem;"></i></div><div><strong>Comisiones automáticas</strong><br><span style="font-size:0.87rem;color:var(--gray);">Cobrás directamente sin intermediarios ni demoras.</span></div></li>
+          <li style="display:flex;align-items:flex-start;gap:14px;"><div style="width:36px;height:36px;background:var(--green-pale);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><i class="fa-solid fa-check" style="color:var(--green);font-size:0.8rem;"></i></div><div><strong>Producto que se vende solo</strong><br><span style="font-size:0.87rem;color:var(--gray);">Resultados reales = clientes que vuelven y recomiendan.</span></div></li>
+        </ul>
+        <a href="contacto.html" class="btn-primary"><i class="fa-solid fa-rocket"></i> Registrarme Ahora</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--gray-light);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="section-label reveal">FAQ</span>
+      <h2 class="section-title reveal">Preguntas frecuentes</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal"><div class="faq-q">¿Necesito experiencia en ventas? <i class="fa-solid fa-chevron-down"></i></div><div class="faq-a">No. Nosotros te formamos desde cero. La clave es la pasión por el bienestar y las ganas de ayudar a otros.</div></div>
+      <div class="faq-item reveal"><div class="faq-q">¿Cuánto tiempo debo dedicarle? <i class="fa-solid fa-chevron-down"></i></div><div class="faq-a">Podés empezar con 2-3 horas diarias. A medida que tu red crece, podés decidir si querés dedicarle más tiempo.</div></div>
+      <div class="faq-item reveal"><div class="faq-q">¿Hay algún costo de inscripción? <i class="fa-solid fa-chevron-down"></i></div><div class="faq-a">El registro es gratuito. Solo necesitás adquirir tu kit de inicio de productos para comenzar a vender.</div></div>
+      <div class="faq-item reveal"><div class="faq-q">¿Cómo cobro mis comisiones? <i class="fa-solid fa-chevron-down"></i></div><div class="faq-a">Las comisiones se liquidan semanalmente por transferencia bancaria directamente a tu cuenta.</div></div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo" style="text-decoration:none;">
+        <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+        <span class="logo-text" style="color:white;">Nutrir<span style="color:var(--peach);">te</span></span>
+      </a>
+      <p>Suplementos naturales de alta calidad para potenciar tu bienestar y convertir tu pasión por la salud en un negocio rentable.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Control de Peso</h4>
+      <ul>
+        <li><a href="control-peso.html#basico">Plan Básico</a></li>
+        <li><a href="control-peso.html#avanzado">Plan Avanzado</a></li>
+        <li><a href="control-peso.html#completo">Plan Completo</a></li>
+        <li><a href="tu-negocio.html">Tu Negocio</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <div class="footer-contact">
+        <div class="contact-item"><i class="fab fa-whatsapp"></i><span>+54 9 3516 70-6742</span></div>
+        <div class="contact-item"><i class="fa-solid fa-envelope"></i><span>info@nutrirte.com</span></div>
+        <div class="contact-item"><i class="fa-solid fa-clock"></i><span>Lun–Vie 9:00–18:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Todos los derechos reservados por Nutrirte.</span>
+    <span>Diseñado con ❤️ para tu bienestar</span>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 20); });
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.querySelector('.faq-q').addEventListener('click', () => {
+      item.classList.toggle('open');
+      const icon = item.querySelector('.faq-q i');
+      icon.style.transform = item.classList.contains('open') ? 'rotate(180deg)' : '';
+    });
+  });
+</script>
+</body>
+</html>

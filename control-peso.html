@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Control de Peso – Nutrirte</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+  :root {
+    --green: #2d7a3a;
+    --green-light: #4caf50;
+    --green-pale: #e8f5e9;
+    --peach: #f4845f;
+    --peach-light: #fdd5c5;
+    --cream: #fffdf7;
+    --dark: #1a1a1a;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+    --radius: 16px;
+    --radius-sm: 8px;
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+  /* HEADER */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--white); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 72px; transition: var(--transition); border-bottom: 1px solid transparent; }
+  header.scrolled { box-shadow: var(--shadow); border-color: #e5e7eb; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--green), var(--green-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
+  .logo-text span { color: var(--peach); }
+  nav { display: flex; align-items: center; gap: 4px; }
+  nav a { text-decoration: none; color: var(--dark); font-size: 0.88rem; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); transition: var(--transition); position: relative; }
+  nav a:hover { color: var(--green); background: var(--green-pale); }
+  nav a.active { color: var(--green); background: var(--green-pale); }
+  .dropdown { position: relative; }
+  .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; background: var(--white); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); min-width: 160px; padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-menu a { display: block; padding: 8px 12px; border-radius: 6px; font-size: 0.84rem; }
+  .dropdown > a { display: flex; align-items: center; gap: 4px; }
+  .dropdown > a::after { content: '▾'; font-size: 0.7rem; }
+  .nav-cta { background: linear-gradient(135deg, var(--green), var(--green-light)); color: var(--white) !important; padding: 10px 20px !important; border-radius: 50px !important; font-weight: 600 !important; margin-left: 8px; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(76,175,80,0.4); background: var(--white) !important; color: var(--green) !important; border: 2px solid var(--green); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; border: none; background: none; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: var(--transition); }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0; background: var(--white); z-index: 999; padding: 24px 5%; overflow-y: auto; flex-direction: column; gap: 8px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { text-decoration: none; color: var(--dark); font-size: 1rem; font-weight: 500; padding: 14px 16px; border-radius: var(--radius-sm); border-bottom: 1px solid #f0f0f0; }
+  .mobile-menu a:hover { background: var(--green-pale); color: var(--green); }
+  .mobile-menu .nav-cta { color: white !important; text-align: center; margin-top: 8px; }
+
+  /* PAGE HERO BANNER */
+  .page-hero { padding: 140px 5% 80px; background: linear-gradient(135deg, #f0faf0 0%, #fff8f5 50%, #fefefe 100%); position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%); border-radius: 50%; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-hero-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--peach-light); color: var(--peach); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; color: var(--dark); margin-bottom: 16px; }
+  .page-hero h1 em { color: var(--green); font-style: normal; }
+  .page-hero p { font-size: 1.05rem; color: var(--gray); line-height: 1.7; max-width: 580px; }
+
+  /* SHARED */
+  section { padding: 90px 5%; }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2; color: var(--dark); margin-bottom: 16px; }
+  .section-sub { font-size: 1rem; color: var(--gray); max-width: 580px; line-height: 1.7; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--green), var(--green-light)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(45,122,58,0.35); transition: var(--transition); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(45,122,58,0.45); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--dark); border: 2px solid #d1d5db; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: var(--transition); }
+  .btn-secondary:hover { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+  .btn-white { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--green); padding: 16px 36px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transition: var(--transition); white-space: nowrap; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .btn-peach { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #e8622a, var(--peach)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(244,132,95,0.4); transition: var(--transition); }
+  .btn-peach:hover { transform: translateY(-2px); }
+  .negocio-banner { background: linear-gradient(135deg, #1b4d24 0%, #2d7a3a 50%, #3a9f4a 100%); padding: 80px 5%; position: relative; overflow: hidden; }
+  .negocio-banner::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border: 60px solid rgba(255,255,255,0.05); border-radius: 50%; }
+  .negocio-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .negocio-text p { font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+  .negocio-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; color: white; line-height: 1.2; }
+
+  /* FOOTER */
+  footer { background: #111; color: rgba(255,255,255,0.7); padding: 60px 5% 30px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 14px; max-width: 280px; }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; text-decoration: none; transition: var(--transition); }
+  .social-btn:hover { background: var(--green); transform: translateY(-2px); }
+  .footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { color: rgba(255,255,255,0.55); font-size: 0.85rem; text-decoration: none; transition: var(--transition); }
+  .footer-col ul li a:hover { color: var(--green-light); padding-left: 4px; }
+  .footer-contact { display: flex; flex-direction: column; gap: 12px; }
+  .contact-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+  .contact-item i { color: var(--green-light); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: rgba(255,255,255,0.35); flex-wrap: wrap; gap: 12px; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .negocio-inner { flex-direction: column; text-align: center; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+
+  .plan-hero { padding: 60px 0 80px; }
+  .plan-tabs { display: flex; gap: 12px; margin-bottom: 60px; flex-wrap: wrap; }
+  .plan-tab { padding: 12px 28px; border-radius: 50px; border: 2px solid #ddd; background: white; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none; color: var(--dark); transition: var(--transition); }
+  .plan-tab:hover, .plan-tab.active { background: var(--green); color: white; border-color: var(--green); box-shadow: 0 4px 16px rgba(45,122,58,0.3); }
+  .plan-section { padding: 100px 5%; scroll-margin-top: 72px; }
+  .plan-section:nth-child(even) { background: var(--white); }
+  .plan-section:nth-child(odd) { background: var(--gray-light); }
+  .plan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1280px; margin: 0 auto; }
+  .plan-grid.reverse { }
+  .plan-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 50px; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+  .badge-basico { background: var(--green-pale); color: var(--green); }
+  .badge-avanzado { background: var(--peach-light); color: var(--peach); }
+  .badge-completo { background: #1a1a1a; color: white; }
+  .plan-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; line-height: 1.1; margin-bottom: 16px; }
+  .plan-desc { font-size: 1rem; color: var(--gray); line-height: 1.7; margin-bottom: 28px; }
+  .plan-includes { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .plan-includes li { display: flex; align-items: flex-start; gap: 12px; font-size: 0.92rem; color: var(--dark); }
+  .plan-includes li i { color: var(--green); margin-top: 2px; flex-shrink: 0; }
+  .plan-price { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; color: var(--green); margin-bottom: 24px; }
+  .plan-price small { font-size: 1rem; font-weight: 400; color: var(--gray); font-family: 'DM Sans', sans-serif; }
+  .plan-img { border-radius: 24px; box-shadow: var(--shadow-lg); width: 100%; }
+  .compare-table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .compare-table th { background: var(--green); color: white; padding: 16px 20px; text-align: left; font-size: 0.88rem; }
+  .compare-table td { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: var(--green-pale); }
+  .check { color: var(--green); } .cross { color: #e0e0e0; }
+  @media (max-width: 768px) { .plan-grid { grid-template-columns: 1fr; } .plan-tabs { } }
+
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+    <span class="logo-text">Nutrir<span>te</span></span>
+  </a>
+  <nav>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="productos.html">Productos</a>
+    <div class="dropdown">
+      <a href="control-peso.html" class="active">Control de Peso</a>
+      <div class="dropdown-menu">
+        <a href="control-peso.html#basico">Básico</a>
+        <a href="control-peso.html#avanzado">Avanzado</a>
+        <a href="control-peso.html#completo">Completo</a>
+      </div>
+    </div>
+    <a href="tu-negocio.html">Tu Negocio</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="ver-productos.html" class="nav-cta">Ver Productos</a>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="nosotros.html">Nosotros</a>
+  <a href="productos.html">Productos</a>
+  <a href="control-peso.html#basico">Control de Peso – Básico</a>
+  <a href="control-peso.html#avanzado">Control de Peso – Avanzado</a>
+  <a href="control-peso.html#completo">Control de Peso – Completo</a>
+  <a href="tu-negocio.html">Tu Negocio</a>
+  <a href="blog.html">Blog</a>
+  <a href="contacto.html">Contacto</a>
+  <a href="ver-productos.html" class="nav-cta">Ver Productos <i class="fa fa-arrow-right"></i></a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-tag reveal"><i class="fa-solid fa-scale-balanced"></i> Control de Peso</div>
+    <h1 class="reveal">Tu plan de <em>bienestar</em><br>a medida</h1>
+    <p class="reveal">Elegí el plan que mejor se adapta a tus objetivos. Todos incluyen asesoramiento y productos de calidad premium.</p>
+    <div style="display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;" class="reveal">
+      <a href="#basico" class="plan-tab active">Plan Básico</a>
+      <a href="#avanzado" class="plan-tab">Plan Avanzado</a>
+      <a href="#completo" class="plan-tab">Plan Completo</a>
+    </div>
+  </div>
+</div>
+
+<!-- BÁSICO -->
+<section id="basico" class="plan-section" style="background:var(--white);">
+  <div class="plan-grid container">
+    <div class="reveal">
+      <div class="plan-badge badge-basico"><i class="fa-solid fa-seedling"></i> Plan Básico</div>
+      <h2 class="plan-title">Empezá tu<br>transformación</h2>
+      <p class="plan-desc">El plan ideal para quienes dan sus primeros pasos hacia un estilo de vida más saludable. Simple, efectivo y accesible.</p>
+      <ul class="plan-includes">
+        <li><i class="fa-solid fa-check"></i><div><strong>1 Batido Nutricional</strong> a elección (durazno, chocolate o vainilla)</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Guía de alimentación saludable</strong> en PDF descargable</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Acceso a comunidad</strong> privada de WhatsApp</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Seguimiento mensual</strong> con asesor nutricional</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Recetario</strong> con 20 preparaciones saludables</div></li>
+      </ul>
+      <div class="plan-price">$6.500 <small>/ mes</small></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="contacto.html" class="btn-primary"><i class="fa-solid fa-rocket"></i> Comenzar Ahora</a>
+        <a href="contacto.html" class="btn-secondary">Consultar</a>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <img src="https://placehold.co/520x420/e8f5e9/2d7a3a?text=Plan+Básico" alt="Plan Básico" class="plan-img">
+    </div>
+  </div>
+</section>
+
+<!-- AVANZADO -->
+<section id="avanzado" class="plan-section" style="background:var(--gray-light);">
+  <div class="plan-grid container" style="direction:rtl;">
+    <div class="reveal" style="direction:ltr;">
+      <div class="plan-badge badge-avanzado"><i class="fa-solid fa-fire"></i> Plan Avanzado</div>
+      <h2 class="plan-title">Acelerá tus<br>resultados</h2>
+      <p class="plan-desc">Para quienes buscan resultados más rápidos y completos. Combiná nutrición, suplementación y seguimiento personalizado.</p>
+      <ul class="plan-includes">
+        <li><i class="fa-solid fa-check"></i><div><strong>Todo lo del Plan Básico</strong> incluido</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>2 Batidos Nutricionales</strong> + Lipocomplex Quema Grasa</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Plan de entrenamiento</strong> personalizado por semana</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Seguimiento quincenal</strong> con nutricionista certificada</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Acceso premium</strong> a recetario completo (50+ recetas)</div></li>
+        <li><i class="fa-solid fa-check"></i><div><strong>Descuentos exclusivos</strong> en productos adicionales</div></li>
+      </ul>
+      <div class="plan-price">$11.900 <small>/ mes</small></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="contacto.html" class="btn-primary"><i class="fa-solid fa-rocket"></i> Comenzar Ahora</a>
+        <a href="contacto.html" class="btn-secondary">Consultar</a>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-1" style="direction:ltr;">
+      <img src="https://placehold.co/520x420/fff3e0/e65100?text=Plan+Avanzado" alt="Plan Avanzado" class="plan-img">
+    </div>
+  </div>
+</section>
+
+<!-- COMPLETO -->
+<section id="completo" class="plan-section" style="background:var(--dark);">
+  <div class="plan-grid container">
+    <div class="reveal">
+      <div class="plan-badge badge-completo"><i class="fa-solid fa-crown"></i> Plan Completo</div>
+      <h2 class="plan-title" style="color:white;">La experiencia<br><em>Nutrirte total</em></h2>
+      <p class="plan-desc" style="color:rgba(255,255,255,0.6);">La transformación más profunda: nutrición, belleza y bienestar en un solo paquete. Todo lo que necesitás para cambiar tu vida.</p>
+      <ul class="plan-includes" style="color:rgba(255,255,255,0.85);">
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Todo lo del Plan Avanzado</strong> incluido</div></li>
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Kit de belleza completo</strong>: colágeno, máscara carbón y crema manos</div></li>
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Consultas semanales</strong> ilimitadas con tu asesor personal</div></li>
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Acceso a eventos exclusivos</strong> de la comunidad Nutrirte</div></li>
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Análisis corporal</strong> inicial y final del plan</div></li>
+        <li><i class="fa-solid fa-check" style="color:var(--green-light);"></i><div><strong style="color:white;">Precio de distribuidor</strong> en todos los productos</div></li>
+      </ul>
+      <div class="plan-price" style="color:var(--green-light);">$18.500 <small style="color:rgba(255,255,255,0.5);">/ mes</small></div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="contacto.html" class="btn-peach"><i class="fa-solid fa-crown"></i> Quiero el Plan Completo</a>
+        <a href="contacto.html" style="display:inline-flex;align-items:center;gap:8px;border:2px solid rgba(255,255,255,0.3);color:white;padding:14px 28px;border-radius:50px;font-weight:600;font-size:0.95rem;text-decoration:none;transition:var(--transition);">Consultar</a>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <img src="https://placehold.co/520x420/2d2d2d/4caf50?text=Plan+Completo" alt="Plan Completo" class="plan-img">
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--white);">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <span class="section-label reveal">Comparativa</span>
+      <h2 class="section-title reveal">¿Cuál plan es para vos?</h2>
+    </div>
+    <div class="reveal" style="overflow-x:auto;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>Básico</th>
+            <th>Avanzado</th>
+            <th>Completo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Batidos nutricionales</td><td>1</td><td>2</td><td>2+</td></tr>
+          <tr><td>Guía alimentación</td><td><i class="fa-solid fa-check check"></i></td><td><i class="fa-solid fa-check check"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+          <tr><td>Lipocomplex quema grasa</td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-check check"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+          <tr><td>Plan de entrenamiento</td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-check check"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+          <tr><td>Kit de belleza</td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+          <tr><td>Seguimiento nutricional</td><td>Mensual</td><td>Quincenal</td><td>Semanal</td></tr>
+          <tr><td>Acceso a eventos</td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+          <tr><td>Precio distribuidor</td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-xmark cross"></i></td><td><i class="fa-solid fa-check check"></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo" style="text-decoration:none;">
+        <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+        <span class="logo-text" style="color:white;">Nutrir<span style="color:var(--peach);">te</span></span>
+      </a>
+      <p>Suplementos naturales de alta calidad para potenciar tu bienestar y convertir tu pasión por la salud en un negocio rentable.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Control de Peso</h4>
+      <ul>
+        <li><a href="control-peso.html#basico">Plan Básico</a></li>
+        <li><a href="control-peso.html#avanzado">Plan Avanzado</a></li>
+        <li><a href="control-peso.html#completo">Plan Completo</a></li>
+        <li><a href="tu-negocio.html">Tu Negocio</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <div class="footer-contact">
+        <div class="contact-item"><i class="fab fa-whatsapp"></i><span>+54 9 3516 70-6742</span></div>
+        <div class="contact-item"><i class="fa-solid fa-envelope"></i><span>info@nutrirte.com</span></div>
+        <div class="contact-item"><i class="fa-solid fa-clock"></i><span>Lun–Vie 9:00–18:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Todos los derechos reservados por Nutrirte.</span>
+    <span>Diseñado con ❤️ para tu bienestar</span>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 20); });
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+</body>
+</html>

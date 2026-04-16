@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Productos – Nutrirte</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+  :root {
+    --green: #2d7a3a;
+    --green-light: #4caf50;
+    --green-pale: #e8f5e9;
+    --peach: #f4845f;
+    --peach-light: #fdd5c5;
+    --cream: #fffdf7;
+    --dark: #1a1a1a;
+    --gray: #6b7280;
+    --gray-light: #f3f4f6;
+    --white: #ffffff;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.14);
+    --radius: 16px;
+    --radius-sm: 8px;
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); overflow-x: hidden; }
+
+  /* HEADER */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: var(--white); padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 72px; transition: var(--transition); border-bottom: 1px solid transparent; }
+  header.scrolled { box-shadow: var(--shadow); border-color: #e5e7eb; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--green), var(--green-light)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+  .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--green); letter-spacing: -0.5px; }
+  .logo-text span { color: var(--peach); }
+  nav { display: flex; align-items: center; gap: 4px; }
+  nav a { text-decoration: none; color: var(--dark); font-size: 0.88rem; font-weight: 500; padding: 8px 14px; border-radius: var(--radius-sm); transition: var(--transition); position: relative; }
+  nav a:hover { color: var(--green); background: var(--green-pale); }
+  nav a.active { color: var(--green); background: var(--green-pale); }
+  .dropdown { position: relative; }
+  .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; background: var(--white); border-radius: var(--radius-sm); box-shadow: var(--shadow-lg); min-width: 160px; padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: var(--transition); z-index: 100; }
+  .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+  .dropdown-menu a { display: block; padding: 8px 12px; border-radius: 6px; font-size: 0.84rem; }
+  .dropdown > a { display: flex; align-items: center; gap: 4px; }
+  .dropdown > a::after { content: '▾'; font-size: 0.7rem; }
+  .nav-cta { background: linear-gradient(135deg, var(--green), var(--green-light)); color: var(--white) !important; padding: 10px 20px !important; border-radius: 50px !important; font-weight: 600 !important; margin-left: 8px; }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(76,175,80,0.4); background: var(--white) !important; color: var(--green) !important; border: 2px solid var(--green); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; border: none; background: none; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--dark); border-radius: 2px; transition: var(--transition); }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0; background: var(--white); z-index: 999; padding: 24px 5%; overflow-y: auto; flex-direction: column; gap: 8px; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { text-decoration: none; color: var(--dark); font-size: 1rem; font-weight: 500; padding: 14px 16px; border-radius: var(--radius-sm); border-bottom: 1px solid #f0f0f0; }
+  .mobile-menu a:hover { background: var(--green-pale); color: var(--green); }
+  .mobile-menu .nav-cta { color: white !important; text-align: center; margin-top: 8px; }
+
+  /* PAGE HERO BANNER */
+  .page-hero { padding: 140px 5% 80px; background: linear-gradient(135deg, #f0faf0 0%, #fff8f5 50%, #fefefe 100%); position: relative; overflow: hidden; }
+  .page-hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%); border-radius: 50%; }
+  .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; }
+  .page-hero-tag { display: inline-flex; align-items: center; gap: 8px; background: var(--peach-light); color: var(--peach); font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 6px 16px; border-radius: 50px; margin-bottom: 20px; }
+  .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; color: var(--dark); margin-bottom: 16px; }
+  .page-hero h1 em { color: var(--green); font-style: normal; }
+  .page-hero p { font-size: 1.05rem; color: var(--gray); line-height: 1.7; max-width: 580px; }
+
+  /* SHARED */
+  section { padding: 90px 5%; }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .section-label { display: inline-block; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; line-height: 1.2; color: var(--dark); margin-bottom: 16px; }
+  .section-sub { font-size: 1rem; color: var(--gray); max-width: 580px; line-height: 1.7; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--green), var(--green-light)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(45,122,58,0.35); transition: var(--transition); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(45,122,58,0.45); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--dark); border: 2px solid #d1d5db; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: var(--transition); }
+  .btn-secondary:hover { border-color: var(--green); color: var(--green); background: var(--green-pale); }
+  .btn-white { display: inline-flex; align-items: center; gap: 10px; background: white; color: var(--green); padding: 16px 36px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 8px 32px rgba(0,0,0,0.2); transition: var(--transition); white-space: nowrap; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .btn-peach { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #e8622a, var(--peach)); color: white; padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 6px 24px rgba(244,132,95,0.4); transition: var(--transition); }
+  .btn-peach:hover { transform: translateY(-2px); }
+  .negocio-banner { background: linear-gradient(135deg, #1b4d24 0%, #2d7a3a 50%, #3a9f4a 100%); padding: 80px 5%; position: relative; overflow: hidden; }
+  .negocio-banner::before { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; border: 60px solid rgba(255,255,255,0.05); border-radius: 50%; }
+  .negocio-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .negocio-text p { font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+  .negocio-text h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 700; color: white; line-height: 1.2; }
+
+  /* FOOTER */
+  footer { background: #111; color: rgba(255,255,255,0.7); padding: 60px 5% 30px; }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px; }
+  .footer-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 14px; max-width: 280px; }
+  .footer-social { display: flex; gap: 10px; margin-top: 20px; }
+  .social-btn { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; text-decoration: none; transition: var(--transition); }
+  .social-btn:hover { background: var(--green); transform: translateY(-2px); }
+  .footer-col h4 { color: white; font-size: 0.9rem; font-weight: 700; margin-bottom: 20px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { color: rgba(255,255,255,0.55); font-size: 0.85rem; text-decoration: none; transition: var(--transition); }
+  .footer-col ul li a:hover { color: var(--green-light); padding-left: 4px; }
+  .footer-contact { display: flex; flex-direction: column; gap: 12px; }
+  .contact-item { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+  .contact-item i { color: var(--green-light); }
+  .footer-bottom { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: rgba(255,255,255,0.35); flex-wrap: wrap; gap: 12px; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) { .footer-inner { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .negocio-inner { flex-direction: column; text-align: center; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+  }
+
+
+  .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+  .filter-btn { padding: 8px 20px; border-radius: 50px; border: 2px solid #ddd; background: white; font-size: 0.84rem; font-weight: 600; cursor: pointer; transition: var(--transition); color: var(--dark); }
+  .filter-btn:hover, .filter-btn.active { background: var(--green); color: white; border-color: var(--green); }
+  .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+  .prod-card { background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
+  .prod-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .prod-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .prod-body { padding: 24px; }
+  .prod-cat { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--peach); margin-bottom: 8px; }
+  .prod-body h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 10px; }
+  .prod-body p { font-size: 0.86rem; color: var(--gray); line-height: 1.6; margin-bottom: 18px; }
+  .prod-footer { display: flex; align-items: center; justify-content: space-between; }
+  .prod-price { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--green); }
+  .prod-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--green-pale); color: var(--green); padding: 8px 18px; border-radius: 50px; font-size: 0.82rem; font-weight: 700; text-decoration: none; transition: var(--transition); }
+  .prod-btn:hover { background: var(--green); color: white; }
+  @media (max-width: 768px) { .products-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1024px) { .products-grid { grid-template-columns: repeat(2,1fr); } }
+
+</style>
+</head>
+<body>
+
+<header id="header">
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+    <span class="logo-text">Nutrir<span>te</span></span>
+  </a>
+  <nav>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="productos.html" class="active">Productos</a>
+    <div class="dropdown">
+      <a href="control-peso.html">Control de Peso</a>
+      <div class="dropdown-menu">
+        <a href="control-peso.html#basico">Básico</a>
+        <a href="control-peso.html#avanzado">Avanzado</a>
+        <a href="control-peso.html#completo">Completo</a>
+      </div>
+    </div>
+    <a href="tu-negocio.html">Tu Negocio</a>
+    <a href="blog.html">Blog</a>
+    <a href="contacto.html">Contacto</a>
+    <a href="ver-productos.html" class="nav-cta">Ver Productos</a>
+  </nav>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="nosotros.html">Nosotros</a>
+  <a href="productos.html">Productos</a>
+  <a href="control-peso.html#basico">Control de Peso – Básico</a>
+  <a href="control-peso.html#avanzado">Control de Peso – Avanzado</a>
+  <a href="control-peso.html#completo">Control de Peso – Completo</a>
+  <a href="tu-negocio.html">Tu Negocio</a>
+  <a href="blog.html">Blog</a>
+  <a href="contacto.html">Contacto</a>
+  <a href="ver-productos.html" class="nav-cta">Ver Productos <i class="fa fa-arrow-right"></i></a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-tag reveal"><i class="fa-solid fa-box-open"></i> Catálogo Completo</div>
+    <h1 class="reveal">Nuestros <em>Productos</em></h1>
+    <p class="reveal">Descubrí nuestra línea completa de suplementos naturales. Calidad premium, fórmulas exclusivas y resultados reales para cada meta.</p>
+  </div>
+</div>
+
+<section style="background:var(--white);">
+  <div class="container">
+    <div class="filter-bar">
+      <button class="filter-btn active">Todos</button>
+      <button class="filter-btn">Nutrición</button>
+      <button class="filter-btn">Rejuvenecimiento</button>
+      <button class="filter-btn">Limpieza</button>
+      <button class="filter-btn">Manos</button>
+      <button class="filter-btn">Celulitis</button>
+      <button class="filter-btn">Cabello</button>
+    </div>
+    <div class="products-grid">
+      <div class="prod-card reveal">
+        <img src="https://placehold.co/400x220/e8f5e9/2d7a3a?text=Batido+Durazno" alt="Batido Durazno">
+        <div class="prod-body">
+          <div class="prod-cat">Nutrición</div>
+          <h3>Batido Nutricional Durazno</h3>
+          <p>15g proteína, 3g fibra. Ideal para subir, bajar o mantener tu peso con sabor increíble.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$4.500</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-1">
+        <img src="https://placehold.co/400x220/fff3e0/e65100?text=Batido+Chocolate" alt="Batido Chocolate">
+        <div class="prod-body">
+          <div class="prod-cat">Nutrición</div>
+          <h3>Batido Nutricional Chocolate</h3>
+          <p>La indulgencia saludable. 15g proteína con el sabor del mejor chocolate.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$4.500</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-2">
+        <img src="https://placehold.co/400x220/fdd5c5/c62828?text=Colágeno" alt="Colágeno">
+        <div class="prod-body">
+          <div class="prod-cat">Rejuvenecimiento</div>
+          <h3>Colágeno Hidrolizado Premium</h3>
+          <p>Fórmula avanzada con ácido hialurónico y vitamina C para una piel radiante y joven.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$5.200</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal">
+        <img src="https://placehold.co/400x220/1a1a1a/ffffff?text=Carbón+Activado" alt="Carbón Activado">
+        <div class="prod-body">
+          <div class="prod-cat">Limpieza</div>
+          <h3>Máscara de Carbón Activado</h3>
+          <p>Efecto Full Cleaning. Limpieza profunda, refresca, suaviza y elimina impurezas.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$3.800</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-1">
+        <img src="https://placehold.co/400x220/e3f2fd/1565c0?text=Crema+Manos" alt="Crema Manos">
+        <div class="prod-body">
+          <div class="prod-cat">Manos</div>
+          <h3>Crema Nutritiva para Manos</h3>
+          <p>Hidratación profunda con manteca de karité y aloe vera. Manos suaves todo el día.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$2.900</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-2">
+        <img src="https://placehold.co/400x220/f3e5f5/6a1b9a?text=Thermolipoday" alt="Thermolipoday">
+        <div class="prod-body">
+          <div class="prod-cat">Celulitis</div>
+          <h3>Thermolipoday Anti-Celulitis</h3>
+          <p>Tratamiento reafirmante con efecto calor. Moldea y tonifica en pocas semanas.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$4.100</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal">
+        <img src="https://placehold.co/400x220/e8f5e9/1b5e20?text=Shampoo+Natural" alt="Shampoo">
+        <div class="prod-body">
+          <div class="prod-cat">Cabello</div>
+          <h3>Shampoo Nutritivo Natural</h3>
+          <p>Con proteínas de seda y aceite de argán. Nutrición profunda para un cabello brillante.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$3.200</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-1">
+        <img src="https://placehold.co/400x220/fff3e0/bf360c?text=Células+Madre" alt="Células Madre">
+        <div class="prod-body">
+          <div class="prod-cat">Rejuvenecimiento</div>
+          <h3>Células Madre Naturales NS</h3>
+          <p>Tecnología de vanguardia para la regeneración celular y el antienvejecimiento activo.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$6.800</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card reveal reveal-delay-2">
+        <img src="https://placehold.co/400x220/e8f5e9/2d7a3a?text=Lipocomplex" alt="Lipocomplex">
+        <div class="prod-body">
+          <div class="prod-cat">Nutrición</div>
+          <h3>Lipocomplex Quema Grasa</h3>
+          <p>Suplemento termogénico natural que acelera el metabolismo y potencia la quema de grasa.</p>
+          <div class="prod-footer">
+            <span class="prod-price">$4.900</span>
+            <a href="ver-productos.html" class="prod-btn">Ver más <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="negocio-banner">
+  <div class="negocio-inner">
+    <div class="negocio-text reveal">
+      <p>Franquicia Digital</p>
+      <h2>Vendé estos productos<br>y generá ingresos.</h2>
+    </div>
+    <a href="tu-negocio.html" class="btn-white reveal">Ver Oportunidad <i class="fa-solid fa-arrow-right"></i></a>
+  </div>
+</div>
+
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo" style="text-decoration:none;">
+        <div class="logo-icon"><i class="fa-solid fa-leaf"></i></div>
+        <span class="logo-text" style="color:white;">Nutrir<span style="color:var(--peach);">te</span></span>
+      </a>
+      <p>Suplementos naturales de alta calidad para potenciar tu bienestar y convertir tu pasión por la salud en un negocio rentable.</p>
+      <div class="footer-social">
+        <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="productos.html">Productos</a></li>
+        <li><a href="blog.html">Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Control de Peso</h4>
+      <ul>
+        <li><a href="control-peso.html#basico">Plan Básico</a></li>
+        <li><a href="control-peso.html#avanzado">Plan Avanzado</a></li>
+        <li><a href="control-peso.html#completo">Plan Completo</a></li>
+        <li><a href="tu-negocio.html">Tu Negocio</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <div class="footer-contact">
+        <div class="contact-item"><i class="fab fa-whatsapp"></i><span>+54 9 3516 70-6742</span></div>
+        <div class="contact-item"><i class="fa-solid fa-envelope"></i><span>info@nutrirte.com</span></div>
+        <div class="contact-item"><i class="fa-solid fa-clock"></i><span>Lun–Vie 9:00–18:00</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Todos los derechos reservados por Nutrirte.</span>
+    <span>Diseñado con ❤️ para tu bienestar</span>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => { header.classList.toggle('scrolled', window.scrollY > 20); });
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+</script>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
